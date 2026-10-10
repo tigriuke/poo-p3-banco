@@ -18,4 +18,16 @@ public class ControladorBanco {
     public ControladorBanco(){
         this.cuentas = new ArrayList<>();
     }
+
+    // Buscar una cuenta por su número
+    public Cuenta buscarCuenta(int numeroCuenta){
+        for (Cuenta c : cuentas){
+            if (c.getNumeroCuenta() == numeroCuenta){
+                return c;
+            }
+        }
+        return null;
+    }
+
+    
 }
