@@ -47,4 +47,45 @@ public class Fecha {
         return (anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0;
     }
 
+    
+    public int getDia() {
+        return dia;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public int getAnio() {
+        return anio;
+    }
+    
+    // Los setters solo cambian el valor si la fecha resultante es válida.
+    // Devuelven true si se aplicó el cambio y false si se rechazó.
+    public boolean setDia(int dia) {
+        return setFecha(dia, this.mes, this.anio);
+    }
+
+    public boolean setMes(int mes) {
+        return setFecha(this.dia, mes, this.anio);
+    }
+
+    public boolean setAnio(int anio) {
+        return setFecha(this.dia, this.mes, anio);
+    }
+
+    public boolean setFecha(int dia, int mes, int anio) {
+        if (!esValida(dia, mes, anio)) {
+            return false;
+        }
+        this.dia = dia;
+        this.mes = mes;
+        this.anio = anio;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%02d/%02d/%d", dia, mes, anio);
+    }
 }
