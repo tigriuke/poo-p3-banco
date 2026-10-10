@@ -60,4 +60,13 @@ public class ControladorBanco {
         }
         return false;
     }
+
+    // Retirar (polmórfico)
+    public boolean retirar(int numeroCuenta, double valor){
+        Cuenta c = buscarCuenta(numeroCuenta);
+        if (c != null){
+            return c.retirar(valor);
+        }
+        return false;
+    }
 }
