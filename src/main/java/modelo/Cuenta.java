@@ -39,6 +39,9 @@ public abstract class Cuenta {
         return false;
     }
 
+    // Método abstracto: cada subclase definira su propia regla para retirar
+    public abstract boolean retirar(double valor);
+
     public int getNumeroCuenta() {
         return numeroCuenta;
     }
