@@ -42,4 +42,9 @@ public class Fecha {
         return dia >= 1 && dia <= diasDelMes(mes, anio);
     }
     
-    
+    // Bisiesto es divisible por 4, salvo los múltiplos de 100 que no lo sean de 400.
+    public static boolean esBisiesto(int anio) {
+        return (anio % 4 == 0 && anio % 100 != 0) || anio % 400 == 0;
+    }
+
+}
