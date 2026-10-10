@@ -69,4 +69,13 @@ public class ControladorBanco {
         }
         return false;
     }
+
+    // Consultar datos de cuenta
+    public String consultarCuenta(int numeroCuenta, boolean soloSaldo){
+        Cuenta c = buscarCuenta(numeroCuenta);
+        if (c != null){
+            return c.consultarDatos(soloSaldo);
+        }
+        return "Cuenta no encontrada.";
+    }
 }
