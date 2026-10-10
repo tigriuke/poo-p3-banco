@@ -28,5 +28,13 @@ public class CuentaCorriente extends Cuenta{
         this.cupoSobregiro = cupoSobregiro;
     }
 
+     @Override
+     public boolean retirar(double valor){
+        if (valor > 0 && valor <= (saldo + cupoSobregiro)) {
+            saldo -= valor; // Puede quedar en negativo si supera el saldo
+            return true;
+        }
+        return false;
+     }
 
 }
