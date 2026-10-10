@@ -30,6 +30,15 @@ public abstract class Cuenta {
         this.saldo = 0;
     }
 
+    // Método común: consignar dinero
+    public boolean consignar(double valor){
+        if (valor > 0){
+            this.saldo += valor;
+            return true;
+        }
+        return false;
+    }
+
     public int getNumeroCuenta() {
         return numeroCuenta;
     }
