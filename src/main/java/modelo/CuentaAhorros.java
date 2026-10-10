@@ -8,6 +8,12 @@ package modelo;
  *
  * @author coffe
  */
-public class CuentaAhorros {
-    
+public class CuentaAhorros extends Cuenta{
+    public CuentaAhorros(int numeroCuenta, String titular, Fecha fechaApertura, double saldoInicial){
+        super(numeroCuenta, titular, fechaApertura, saldoInicial);
+    }
+
+    public CuentaAhorros(int numeroCuenta, String titular, Fecha fechaApertura){
+        super(numeroCuenta, titular, fechaApertura);
+    }
 }
