@@ -89,6 +89,9 @@ public abstract class Cuenta {
         return consultarDatos();
     }
     
-    
+    @Override 
+    public String toString(){
+        return consultarDatos();
+    }
     
 }
