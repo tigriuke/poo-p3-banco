@@ -37,4 +37,10 @@ public class CuentaCorriente extends Cuenta{
         return false;
      }
 
+     @Override 
+     public String consultarDatos(){
+        return "[CUENTA CORRIENTE]\n" + super.consultarDatos() + 
+        "\nCupo de Sobregiro: $" + String.format("%.2f", cupoSobregiro);
+     }
+
 }
