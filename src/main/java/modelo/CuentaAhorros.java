@@ -26,4 +26,9 @@ public class CuentaAhorros extends Cuenta{
         return false;
     }
 
+    @Override 
+    public String consultarDatos(){
+        return "[CUENTA DE AHORROS]\n" + super.consultarDatos();
+    }
+
 }
