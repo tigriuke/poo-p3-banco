@@ -21,6 +21,14 @@ public abstract class Cuenta {
         this.fechaApertura = fechaApertura;
         this.saldo = saldo;
     }
+    
+    // Sobrecarga de constructor (por si se abre con saldo 0)
+    public Cuenta(int numeroCuenta, String titular, Fecha fechaApertura){
+        this.numeroCuenta = numeroCuenta;
+        this.titular = titular;
+        this.fechaApertura = fechaApertura;
+        this.saldo = 0;
+    }
 
     public int getNumeroCuenta() {
         return numeroCuenta;
@@ -53,6 +61,7 @@ public abstract class Cuenta {
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
+    
     
     
 }
