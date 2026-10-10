@@ -7,6 +7,9 @@ package controlador;
 import java.util.ArrayList;
 
 import modelo.Cuenta;
+import modelo.CuentaAhorros;
+import modelo.CuentaCorriente;
+import modelo.Fecha;
 
 /**
  *
@@ -29,5 +32,23 @@ public class ControladorBanco {
         return null;
     }
 
-    
+    // Crear cuenta de ahorros
+    public boolean crearCuentaAhorros(int numero, String titular, int dia, int mes, int anio, double saldoInicial){
+        if (buscarCuenta(numero) != null || !Fecha.esValida(dia, mes, anio) || titular.trim().isEmpty() || saldoInicial < 0){
+            return false;
+        }
+        Fecha fecha = new Fecha(dia, mes, anio);
+        cuentas.add(new CuentaAhorros(numero, titular.trim(), fecha, saldoInicial));
+        return true;
+    }
+
+    // Crear cuenta corriente
+    public boolean crearCuentaCorriente(int numero, String titular, int dia, int mes, int anio, double saldoInicial, double sobregiro) {
+        if (buscarCuenta(numero) != null || !Fecha.esValida(dia, mes, anio) || titular.trim().isEmpty() || saldoInicial < 0 || sobregiro < 0) {
+            return false;
+        }
+        Fecha fecha = new Fecha(dia, mes, anio);
+        cuentas.add(new CuentaCorriente(numero, titular.trim(), fecha, saldoInicial, sobregiro));
+        return true;
+    }
 }
