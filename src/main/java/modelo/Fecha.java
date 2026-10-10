@@ -13,12 +13,33 @@ public class Fecha {
     private int mes;
     private int anio;
 
-    
+    // Antes de crear una Fecha quien la cree debe comprobar si la fecha es valida con Fecha.esValida(dia, mes, anio).
     public Fecha(int dia, int mes, int anio) {
         this.dia = dia;
         this.mes = mes;
         this.anio = anio;
     }
 
+    // Cantidad de días del mes, devuelve 0 si es invalido
+    public static int diasDelMes(int mes, int anio) {
+        switch (mes) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                return 31;
+            case 4: case 6: case 9: case 11:
+                return 30;
+            case 2:
+                return esBisiesto(anio) ? 29 : 28;
+            default:
+                return 0;
+        }
+    }
     
-}
+    // validacion de una fecha con meses de 1 al 12, an
+    public static boolean esValida(int dia, int mes, int anio) {
+        if (mes < 1 || mes > 12) {
+            return false;
+        }
+        return dia >= 1 && dia <= diasDelMes(mes, anio);
+    }
+    
+    
