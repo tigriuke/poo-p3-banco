@@ -51,4 +51,13 @@ public class ControladorBanco {
         cuentas.add(new CuentaCorriente(numero, titular.trim(), fecha, saldoInicial, sobregiro));
         return true;
     }
+
+    // Consignar
+    public boolean consignar(int numeroCuenta, double valor){
+        Cuenta c = buscarCuenta(numeroCuenta);
+        if (c != null){
+            return c.consignar(valor);
+        }
+        return false;
+    }
 }
