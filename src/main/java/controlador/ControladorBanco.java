@@ -78,4 +78,8 @@ public class ControladorBanco {
         }
         return "Cuenta no encontrada.";
     }
+
+    public ArrayList<Cuenta> getCuentas(){
+        return cuentas;
+    }
 }
