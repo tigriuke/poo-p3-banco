@@ -73,6 +73,21 @@ public abstract class Cuenta {
     public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
+
+    // Sobrecarga de métodos para consulta de datos
+    public String consultarDatos(){
+        return "No. Cuenta: " + numeroCuenta +
+               "\nTitular: " + titular +
+               "\nFecha Apertura: " + fechaApertura.toString() +
+               "\nSaldo: $" + String.format("%.2f", saldo);
+    }
+
+    public String consultarDatos(boolean soloSaldo){
+        if (soloSaldo) {
+            return "Saldo actual: $" + String.format("%.2f",saldo);
+        }
+        return consultarDatos();
+    }
     
     
     
