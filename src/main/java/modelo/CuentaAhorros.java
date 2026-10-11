@@ -8,6 +8,27 @@ package modelo;
  *
  * @author coffe
  */
-public class CuentaAhorros {
-    
+public class CuentaAhorros extends Cuenta{
+    public CuentaAhorros(int numeroCuenta, String titular, Fecha fechaApertura, double saldoInicial){
+        super(numeroCuenta, titular, fechaApertura, saldoInicial);
+    }
+
+    public CuentaAhorros(int numeroCuenta, String titular, Fecha fechaApertura){
+        super(numeroCuenta, titular, fechaApertura);
+    }
+
+    @Override 
+    public boolean retirar(double valor){
+        if (valor > 0 && valor <= saldo){
+            saldo -= valor;
+            return true;
+        }
+        return false;
+    }
+
+    @Override 
+    public String consultarDatos(){
+        return "[CUENTA DE AHORROS]\n" + super.consultarDatos();
+    }
+
 }
