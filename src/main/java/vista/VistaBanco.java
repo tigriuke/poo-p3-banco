@@ -3,20 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-
+import controlador.ControladorBanco;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Usuario
  */
 public class VistaBanco extends javax.swing.JFrame {
     
+    private ControladorBanco controlador;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VistaBanco.class.getName());
 
     /**
      * Creates new form VistaBanco
      */
-    public VistaBanco() {
+    public VistaBanco(ControladorBanco controlador) {
+        this.controlador = controlador;
         initComponents();
+        // Como se inicia como ahorros, se desactiva el cupoSobregiro
+        cupoSobregiro.setEnabled(false);
     }
 
     /**
@@ -258,6 +263,7 @@ public class VistaBanco extends javax.swing.JFrame {
         jLabel11.setText("Consola de Información");
 
         consolaInformacion.setColumns(20);
+        consolaInformacion.setForeground(new java.awt.Color(0, 0, 0));
         consolaInformacion.setRows(5);
         consolaInformacion.setEnabled(false);
         jScrollPane1.setViewportView(consolaInformacion);
@@ -293,6 +299,10 @@ public class VistaBanco extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public VistaBanco() {
+        this(new ControladorBanco());
+    }
+    
     private void anioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_anioActionPerformed
@@ -302,15 +312,61 @@ public class VistaBanco extends javax.swing.JFrame {
     }//GEN-LAST:event_mesActionPerformed
 
     private void consultarCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultarCuentaActionPerformed
-        // TODO add your handling code here:
+        try {
+            int num = Integer.parseInt(noCuentaConsultar.getText().trim());
+            boolean soloSaldoCheck = soloSaldo.isSelected();
+            String res = controlador.consultarCuenta(num, soloSaldoCheck);
+            consolaInformacion.append("--- CONSULTA ---\n" + res + "\n\n");
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese un número de cuenta válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_consultarCuentaActionPerformed
 
     private void retirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_retirarActionPerformed
-        // TODO add your handling code here:
+        try {
+            int num = Integer.parseInt(noCuentaConsultar.getText().trim());
+            double valorMonto = Double.parseDouble(monto.getText().trim());
+
+            if (controlador.retirar(num, valorMonto)) {
+                JOptionPane.showMessageDialog(this, "Retiro exitoso.");
+                consolaInformacion.append("-> Retiro de $" + valorMonto + " de la cuenta " + num + "\n" +
+                                          controlador.consultarCuenta(num, false) + "\n\n");
+                monto.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Retiro denegado: fondos insuficientes o límite de sobregiro excedido.", "Transacción Rechazada", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese datos numéricos válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_retirarActionPerformed
 
     private void crearCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearCuentaActionPerformed
-        // TODO add your handling code here:
+        try {
+            int num = Integer.parseInt(noCuenta.getText().trim());
+            String nomTitular = titular.getText().trim();
+            int d = Integer.parseInt(dia.getText().trim());
+            int m = Integer.parseInt(mes.getText().trim());
+            int a = Integer.parseInt(anio.getText().trim());
+            double saldo = Double.parseDouble(saldoInicial.getText().trim());
+
+            boolean creada;
+            if ("Ahorros".equals(tipoCuenta.getSelectedItem())) {
+                creada = controlador.crearCuentaAhorros(num, nomTitular, d, m, a, saldo);
+            } else {
+                double sobregiro = Double.parseDouble(cupoSobregiro.getText().trim());
+                creada = controlador.crearCuentaCorriente(num, nomTitular, d, m, a, saldo, sobregiro);
+            }
+
+            if (creada) {
+                JOptionPane.showMessageDialog(this, "Cuenta creada exitosamente.");
+                consolaInformacion.append("-> Cuenta " + num + " registrada con éxito.\n\n");
+                limpiarCamposApertura();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo crear la cuenta. Verifique fecha, datos o si el número ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese valores numéricos válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_crearCuentaActionPerformed
 
     private void cupoSobregiroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cupoSobregiroActionPerformed
@@ -330,7 +386,11 @@ public class VistaBanco extends javax.swing.JFrame {
     }//GEN-LAST:event_titularActionPerformed
 
     private void tipoCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoCuentaActionPerformed
-        // TODO add your handling code here:
+        boolean esCorriente = "Corriente".equals(tipoCuenta.getSelectedItem());
+        cupoSobregiro.setEnabled(esCorriente);
+        if (!esCorriente) {
+            cupoSobregiro.setText("0");
+        }
     }//GEN-LAST:event_tipoCuentaActionPerformed
 
     private void noCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noCuentaActionPerformed
@@ -346,13 +406,37 @@ public class VistaBanco extends javax.swing.JFrame {
     }//GEN-LAST:event_montoActionPerformed
 
     private void consignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consignarActionPerformed
-        // TODO add your handling code here:
+        try {
+            int num = Integer.parseInt(noCuentaConsultar.getText().trim());
+            double valorMonto = Double.parseDouble(monto.getText().trim());
+
+            if (controlador.consignar(num, valorMonto)) {
+                JOptionPane.showMessageDialog(this, "Consignación exitosa.");
+                consolaInformacion.append("-> Consignación de $" + valorMonto + " a la cuenta " + num + "\n" +
+                                          controlador.consultarCuenta(num, false) + "\n\n");
+                monto.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo consignar. Verifique el número de cuenta o que el monto sea positivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Ingrese datos numéricos válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_consignarActionPerformed
 
     private void soloSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_soloSaldoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_soloSaldoActionPerformed
 
+    private void limpiarCamposApertura() {
+        noCuenta.setText("");
+        titular.setText("");
+        dia.setText("");
+        mes.setText("");
+        anio.setText("");
+        saldoInicial.setText("0");
+        cupoSobregiro.setText("0");
+    }
+    
     /**
      * @param args the command line arguments
      */
