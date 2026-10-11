@@ -1,5 +1,12 @@
 package main;
 
-public class Main {
+import controlador.ControladorBanco;
+import vista.VistaBanco;
 
+public class Main {
+    public static void main(String[] args) {
+        ControladorBanco controlador = new ControladorBanco();
+        VistaBanco vista = new VistaBanco(controlador);
+        vista.setVisible(true);
+    }
 }
